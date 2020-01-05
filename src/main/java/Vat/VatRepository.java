@@ -21,8 +21,13 @@ public class VatRepository {
     Set<Vat> vatValues;
 
     public Vat getVatFor(String country, Type productType) throws VatNotFoundException {
-        return vatValues.stream().filter(val -> val.country.equals(country)).findFirst().orElseThrow(() ->
-                new VatNotFoundException(String.format("Vat for country %s and product type %s was not found", country, productType))
-        );
+        return vatValues.stream().filter(val -> val.country.equals(country) && val.productType.equals(productType))
+                .findFirst()
+                .orElseThrow(() ->
+                        {
+                            String message = String.format("Vat for country %s and product type %s was not found", country, productType);
+                            return new VatNotFoundException(message);
+                        }
+                );
     }
 }
