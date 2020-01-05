@@ -1,6 +1,5 @@
 import Product.Product;
 import Product.Type;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

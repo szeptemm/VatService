@@ -18,14 +18,6 @@ public class Product {
         this.country = country;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public BigDecimal getNetPrice() {
         return netPrice;
     }
