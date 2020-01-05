@@ -30,4 +30,8 @@ public class VatRepository {
                         }
                 );
     }
+
+    public void addVatValue(String country, Type productType, BigDecimal amount) {
+        vatValues.add(new Vat(country, productType, amount));
+    }
 }
