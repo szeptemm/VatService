@@ -2,12 +2,19 @@ package Vat;
 
 import Product.Type;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class VatRepositoryTest {
 
@@ -18,7 +25,6 @@ class VatRepositoryTest {
         BigDecimal taxRate1 = new BigDecimal("0.05");
         BigDecimal taxRate2 = new BigDecimal("0.08");
         BigDecimal taxRate3 = new BigDecimal("0.23");
-
         //when
         BigDecimal polishBabyVat = vatRepo.getVatFor("Poland", Type.BABY).getAmount();
         BigDecimal polishBooksVat = vatRepo.getVatFor("Poland", Type.BOOK).getAmount();
@@ -48,5 +54,33 @@ class VatRepositoryTest {
 
         //then
         assertThat(exception.getMessage()).isEqualTo("Vat for country Poland111 and product type BOOK was not found");
+    }
+
+    @Test
+    void shouldCallAddVatValueOneTime() {
+        //given
+        VatRepository repositoryToTest = Mockito.mock(VatRepository.class);
+        //when
+        repositoryToTest.addVatValue("Germany", Type.BOOK, new BigDecimal("0.08"));
+        //then
+        verify(repositoryToTest, times(1)).addVatValue("Germany", Type.BOOK, new BigDecimal("0.08"));
+    }
+
+    @Test
+    void shouldAddProperValues() {
+        //given
+        VatRepository repositoryToTest = Mockito.mock(VatRepository.class);
+        //then
+        doAnswer(invocation -> {
+            Object arg0 = invocation.getArgument(0);
+            Object arg1 = invocation.getArgument(1);
+            Object arg2 = invocation.getArgument(2);
+
+            assertEquals("Germany", arg0);
+            assertEquals(Type.FOOD, arg1);
+            assertEquals(new BigDecimal("0.23"), arg2);
+            return null;
+        }).when(repositoryToTest).addVatValue(anyString(), any(Type.class), any(BigDecimal.class));
+        repositoryToTest.addVatValue("Germany", Type.FOOD, new BigDecimal("0.23"));
     }
 }
