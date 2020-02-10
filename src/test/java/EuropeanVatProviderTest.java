@@ -23,14 +23,14 @@ import static org.mockito.ArgumentMatchers.eq;
 class EuropeanVatProviderTest {
 
 
-    EuropeanVatProvider vatProvider;
+    //EuropeanVatProvider vatProvider;
 
-    BigDecimal babyVat;
-    BigDecimal booksVat;
-    BigDecimal clothesVat;
-    BigDecimal foodVat;
-    BigDecimal gamesVat;
-    BigDecimal shoesVat;
+//    BigDecimal babyVat;
+//    BigDecimal booksVat;
+//    BigDecimal clothesVat;
+//    BigDecimal foodVat;
+//    BigDecimal gamesVat;
+//    BigDecimal shoesVat;
 
 //    @BeforeEach
 //    void setUp(TestInfo info) {
@@ -88,7 +88,7 @@ class EuropeanVatProviderTest {
         VatProvider vatProvider = Mockito.mock(VatProvider.class);
         BigDecimal taxRate = new BigDecimal("0.08");
         Mockito.when(vatProvider.getVatFor(eq("Denmark"),any(Type.class))).thenReturn(taxRate);
-        EuropeanVatProvider europeanVatProvider = new EuropeanVatProvider(vatProvider);
+        EuropeanVatProvider europeanVatProvider = new EuropeanVatProvider();
         //when
         BigDecimal danemarkBooksVat = europeanVatProvider.getVatFor("Denmark", Type.BOOK);
 
@@ -112,7 +112,7 @@ class EuropeanVatProviderTest {
         VatProvider vatProvider = Mockito.mock(VatProvider.class);
         Mockito.when(vatProvider.getVatFor(anyString(), any(Type.class))).
                 thenThrow(new CountryNotSupportedException("This country is not supported: " + anyString()));
-        EuropeanVatProvider europeanVatProvider = new EuropeanVatProvider(vatProvider);
+        EuropeanVatProvider europeanVatProvider = new EuropeanVatProvider();
 
         //then
         CountryNotSupportedException actual =

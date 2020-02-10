@@ -5,12 +5,6 @@ import java.util.Arrays;
 
 public class EuropeanVatProvider implements VatProvider {
 
-    private VatProvider vatProvider;
-
-    public EuropeanVatProvider(VatProvider vatProvider) {
-        this.vatProvider = vatProvider;
-    }
-
     public EuropeanVatProvider() {
     }
 
