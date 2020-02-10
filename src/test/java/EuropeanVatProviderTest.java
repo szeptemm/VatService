@@ -1,5 +1,10 @@
 import Product.Type;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -8,61 +13,69 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 
 class EuropeanVatProviderTest {
 
+    EuropeanVatProvider vatProvider;
+
+    BigDecimal babyVat;
+    BigDecimal booksVat;
+    BigDecimal clothesVat;
+    BigDecimal foodVat;
+    BigDecimal gamesVat;
+    BigDecimal shoesVat;
+
+    @BeforeEach
+    void setUp(TestInfo info) {
+        vatProvider = new EuropeanVatProvider();
+        babyVat = vatProvider.getVatFor(info.getDisplayName(), Type.BABY);
+        booksVat = vatProvider.getVatFor(info.getDisplayName(), Type.BOOK);
+        clothesVat = vatProvider.getVatFor(info.getDisplayName(), Type.CLOTHES);
+        foodVat = vatProvider.getVatFor(info.getDisplayName(), Type.FOOD);
+        gamesVat = vatProvider.getVatFor(info.getDisplayName(), Type.GAMES);
+        shoesVat = vatProvider.getVatFor(info.getDisplayName(), Type.SHOES);
+    }
+
+
+    @DisplayName("Poland")
     @Test
     void shouldReturnTaxRatesInPoland() {
         //given
-        EuropeanVatProvider vatProvider = new EuropeanVatProvider();
         BigDecimal taxRate1 = new BigDecimal("0.05");
         BigDecimal taxRate2 = new BigDecimal("0.08");
         BigDecimal taxRate3 = new BigDecimal("0.23");
 
-        //when
-        BigDecimal polishBabyVat = vatProvider.getVatFor("Poland", Type.BABY);
-        BigDecimal polishBooksVat = vatProvider.getVatFor("Poland", Type.BOOK);
-        BigDecimal polishClothesVat = vatProvider.getVatFor("Poland", Type.CLOTHES);
-        BigDecimal polishFoodVat = vatProvider.getVatFor("Poland", Type.FOOD);
-        BigDecimal polishGamesVat = vatProvider.getVatFor("Poland", Type.GAMES);
-        BigDecimal polishShoesVat = vatProvider.getVatFor("Poland", Type.SHOES);
         //then
         assertAll(
-                () -> assertThat(polishBabyVat).isEqualTo(taxRate1),
-                () -> assertThat(polishBooksVat).isEqualTo(taxRate1),
-                () -> assertThat(polishClothesVat).isEqualTo(taxRate3),
-                () -> assertThat(polishFoodVat).isEqualTo(taxRate2),
-                () -> assertThat(polishGamesVat).isEqualTo(taxRate3),
-                () -> assertThat(polishShoesVat).isEqualTo(taxRate3)
+                () -> assertThat(babyVat).isEqualTo(taxRate1),
+                () -> assertThat(booksVat).isEqualTo(taxRate1),
+                () -> assertThat(clothesVat).isEqualTo(taxRate3),
+                () -> assertThat(foodVat).isEqualTo(taxRate2),
+                () -> assertThat(gamesVat).isEqualTo(taxRate3),
+                () -> assertThat(shoesVat).isEqualTo(taxRate3)
         );
     }
 
+    @DisplayName("Germany")
     @Test
     void shouldReturnTaxRatesInGermany() {
         //given
-        EuropeanVatProvider vatProvider = new EuropeanVatProvider();
         BigDecimal taxRate1 = new BigDecimal("0.04");
         BigDecimal taxRate2 = new BigDecimal("0.10");
         BigDecimal taxRate3 = new BigDecimal("0.21");
 
-        //when
-        BigDecimal germanBabyVat = vatProvider.getVatFor("Germany", Type.BABY);
-        BigDecimal germanBooksVat = vatProvider.getVatFor("Germany", Type.BOOK);
-        BigDecimal germanClothesVat = vatProvider.getVatFor("Germany", Type.CLOTHES);
-        BigDecimal germanFoodVat = vatProvider.getVatFor("Germany", Type.FOOD);
-        BigDecimal germanGamesVat = vatProvider.getVatFor("Germany", Type.GAMES);
-        BigDecimal germanShoesVat = vatProvider.getVatFor("Germany", Type.SHOES);
         //then
         assertAll(
-                () -> assertThat(germanBabyVat).isEqualTo(taxRate1),
-                () -> assertThat(germanBooksVat).isEqualTo(taxRate1),
-                () -> assertThat(germanClothesVat).isEqualTo(taxRate2),
-                () -> assertThat(germanFoodVat).isEqualTo(taxRate1),
-                () -> assertThat(germanGamesVat).isEqualTo(taxRate3),
-                () -> assertThat(germanShoesVat).isEqualTo(taxRate3)
+                () -> assertThat(babyVat).isEqualTo(taxRate1),
+                () -> assertThat(booksVat).isEqualTo(taxRate1),
+                () -> assertThat(clothesVat).isEqualTo(taxRate2),
+                () -> assertThat(foodVat).isEqualTo(taxRate1),
+                () -> assertThat(gamesVat).isEqualTo(taxRate3),
+                () -> assertThat(shoesVat).isEqualTo(taxRate3)
         );
     }
 
@@ -80,6 +93,15 @@ class EuropeanVatProviderTest {
         assertThat(taxRate).isEqualTo(danemarkBooksVat);
     }
 
+    @ParameterizedTest
+    @EnumSource(Type.class)
+    void shouldReturnTaxRatesInDenmark2(Type type) {
+        //given
+        EuropeanVatProvider vatProvider = new EuropeanVatProvider();
+        BigDecimal taxRate = new BigDecimal("0.08");
+        assertThat(vatProvider.getVatFor("Denmark", type)).isEqualTo(taxRate);
+    }
+
     @Test
     void shouldReturnCountryNotSupportedException() {
         //given
@@ -93,5 +115,22 @@ class EuropeanVatProviderTest {
                 assertThrows(CountryNotSupportedException.class,
                         () -> europeanVatProvider.getVatFor("Japan", Type.BOOK));
         assertEquals("This country is not supported: Japan", actual.getMessage());
+    }
+
+    @Test
+    void shouldReturnCountryNotSupportedException2() {
+        //given
+        EuropeanVatProvider vatProvider = new EuropeanVatProvider();
+
+        //when
+        Exception ex = assertThrows(CountryNotSupportedException.class, () -> {
+            vatProvider.getVatFor("Japan", Type.BOOK);
+        });
+
+        String expectedMsg = "This country is not supported: Japan";
+        String actualMsg = ex.getMessage();
+
+        //then
+        assertTrue(actualMsg.contains(expectedMsg));
     }
 }

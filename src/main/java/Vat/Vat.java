@@ -14,4 +14,9 @@ public class Vat {
         this.productType = productType;
         this.amount = amount;
     }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
 }
