@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -14,11 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 
 class EuropeanVatProviderTest {
+
 
     EuropeanVatProvider vatProvider;
 
@@ -29,55 +32,55 @@ class EuropeanVatProviderTest {
     BigDecimal gamesVat;
     BigDecimal shoesVat;
 
-    @BeforeEach
-    void setUp(TestInfo info) {
-        vatProvider = new EuropeanVatProvider();
-        babyVat = vatProvider.getVatFor(info.getDisplayName(), Type.BABY);
-        booksVat = vatProvider.getVatFor(info.getDisplayName(), Type.BOOK);
-        clothesVat = vatProvider.getVatFor(info.getDisplayName(), Type.CLOTHES);
-        foodVat = vatProvider.getVatFor(info.getDisplayName(), Type.FOOD);
-        gamesVat = vatProvider.getVatFor(info.getDisplayName(), Type.GAMES);
-        shoesVat = vatProvider.getVatFor(info.getDisplayName(), Type.SHOES);
-    }
-
-
-    @DisplayName("Poland")
-    @Test
-    void shouldReturnTaxRatesInPoland() {
-        //given
-        BigDecimal taxRate1 = new BigDecimal("0.05");
-        BigDecimal taxRate2 = new BigDecimal("0.08");
-        BigDecimal taxRate3 = new BigDecimal("0.23");
-
-        //then
-        assertAll(
-                () -> assertThat(babyVat).isEqualTo(taxRate1),
-                () -> assertThat(booksVat).isEqualTo(taxRate1),
-                () -> assertThat(clothesVat).isEqualTo(taxRate3),
-                () -> assertThat(foodVat).isEqualTo(taxRate2),
-                () -> assertThat(gamesVat).isEqualTo(taxRate3),
-                () -> assertThat(shoesVat).isEqualTo(taxRate3)
-        );
-    }
-
-    @DisplayName("Germany")
-    @Test
-    void shouldReturnTaxRatesInGermany() {
-        //given
-        BigDecimal taxRate1 = new BigDecimal("0.04");
-        BigDecimal taxRate2 = new BigDecimal("0.10");
-        BigDecimal taxRate3 = new BigDecimal("0.21");
-
-        //then
-        assertAll(
-                () -> assertThat(babyVat).isEqualTo(taxRate1),
-                () -> assertThat(booksVat).isEqualTo(taxRate1),
-                () -> assertThat(clothesVat).isEqualTo(taxRate2),
-                () -> assertThat(foodVat).isEqualTo(taxRate1),
-                () -> assertThat(gamesVat).isEqualTo(taxRate3),
-                () -> assertThat(shoesVat).isEqualTo(taxRate3)
-        );
-    }
+//    @BeforeEach
+//    void setUp(TestInfo info) {
+//        vatProvider = new EuropeanVatProvider();
+//        babyVat = vatProvider.getVatFor(info.getDisplayName(), Type.BABY);
+//        booksVat = vatProvider.getVatFor(info.getDisplayName(), Type.BOOK);
+//        clothesVat = vatProvider.getVatFor(info.getDisplayName(), Type.CLOTHES);
+//        foodVat = vatProvider.getVatFor(info.getDisplayName(), Type.FOOD);
+//        gamesVat = vatProvider.getVatFor(info.getDisplayName(), Type.GAMES);
+//        shoesVat = vatProvider.getVatFor(info.getDisplayName(), Type.SHOES);
+//    }
+//
+//
+//    @DisplayName("Poland")
+//    @Test
+//    void shouldReturnTaxRatesInPoland() {
+//        //given
+//        BigDecimal taxRate1 = new BigDecimal("0.05");
+//        BigDecimal taxRate2 = new BigDecimal("0.08");
+//        BigDecimal taxRate3 = new BigDecimal("0.23");
+//
+//        //then
+//        assertAll(
+//                () -> assertThat(babyVat).isEqualTo(taxRate1),
+//                () -> assertThat(booksVat).isEqualTo(taxRate1),
+//                () -> assertThat(clothesVat).isEqualTo(taxRate3),
+//                () -> assertThat(foodVat).isEqualTo(taxRate2),
+//                () -> assertThat(gamesVat).isEqualTo(taxRate3),
+//                () -> assertThat(shoesVat).isEqualTo(taxRate3)
+//        );
+//    }
+//
+//    @DisplayName("Germany")
+//    @Test
+//    void shouldReturnTaxRatesInGermany() {
+//        //given
+//        BigDecimal taxRate1 = new BigDecimal("0.04");
+//        BigDecimal taxRate2 = new BigDecimal("0.10");
+//        BigDecimal taxRate3 = new BigDecimal("0.21");
+//
+//        //then
+//        assertAll(
+//                () -> assertThat(babyVat).isEqualTo(taxRate1),
+//                () -> assertThat(booksVat).isEqualTo(taxRate1),
+//                () -> assertThat(clothesVat).isEqualTo(taxRate2),
+//                () -> assertThat(foodVat).isEqualTo(taxRate1),
+//                () -> assertThat(gamesVat).isEqualTo(taxRate3),
+//                () -> assertThat(shoesVat).isEqualTo(taxRate3)
+//        );
+//    }
 
     @Test
     void shouldReturnTaxRatesInDenmark() {
@@ -99,6 +102,7 @@ class EuropeanVatProviderTest {
         //given
         EuropeanVatProvider vatProvider = new EuropeanVatProvider();
         BigDecimal taxRate = new BigDecimal("0.08");
+        //then
         assertThat(vatProvider.getVatFor("Denmark", type)).isEqualTo(taxRate);
     }
 
