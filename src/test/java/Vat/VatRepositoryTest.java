@@ -67,6 +67,17 @@ class VatRepositoryTest {
     }
 
     @Test
+    void shouldThrowAnExceptinWhenAmountOfVatIsLessThanZero() {
+        //given
+        VatRepository repositoryToTest = new VatRepository();
+        //when
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> repositoryToTest.addVatValue("Germany", Type.BOOK, new BigDecimal("-0.08")));
+        //then
+        assertThat(exception.getMessage()).isEqualTo("Amount of VAT cannot be lesser than zero.");
+    }
+
+    @Test
     void shouldAddProperValues() {
         //given
         VatRepository repositoryToTest = Mockito.mock(VatRepository.class);

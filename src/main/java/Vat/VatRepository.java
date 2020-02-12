@@ -1,6 +1,7 @@
 package Vat;
 
 import Product.Type;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -31,7 +32,10 @@ public class VatRepository {
                 );
     }
 
-    public void addVatValue(String country, Type productType, BigDecimal amount) {
+    public void addVatValue(@NotNull String country, @NotNull Type productType, @NotNull BigDecimal amount) {
+        if(amount.compareTo(BigDecimal.ZERO) == -1) {
+            throw new IllegalArgumentException("Amount of VAT cannot be lesser than zero.");
+        }
         vatValues.add(new Vat(country, productType, amount));
     }
 }

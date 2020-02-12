@@ -21,13 +21,23 @@ class VatServiceTest {
         Mockito.when(vatProvider.getVatFor(anyString(),any(Type.class) )).thenReturn(new BigDecimal("0.05"));
         VatService serviceToTest = new VatService(vatProvider);
         Product product = new Product(UUID.randomUUID(), "My book", new BigDecimal("20.50"), Type.BOOK, "Poland");
-
         //when
         BigDecimal grossPrice = serviceToTest.getGrossPrice(product);
-
         //then
-
         assertThat(grossPrice).isEqualTo(new BigDecimal("21.53"));
+    }
+
+    @Test
+    void shouldSomething() {
+        //given
+        VatProvider vatProvider = Mockito.mock(VatProvider.class);
+        Mockito.when(vatProvider.getVatFor(anyString(),any(Type.class) )).thenReturn(new BigDecimal("0.05"));
+        VatService serviceToTest = new VatService(vatProvider);
+        Product product = new Product(UUID.randomUUID(), "My book", new BigDecimal("-20.50"), Type.BOOK, "Poland");
+        //when
+        BigDecimal grossPrice = serviceToTest.getGrossPrice(product);
+        //then
+        assertThat(grossPrice).isEqualTo(new BigDecimal("-21.53"));
     }
 
     @Test
